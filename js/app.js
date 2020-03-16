@@ -18,9 +18,9 @@
 		if (loginInfo.password.length < 6) {
 			return callback('密码最短为 6 个字符');
 		} */
-		debugger;
 		var users = JSON.parse(localStorage.getItem('$users') || '[]');
-		var authed = true;users.some(function(user) {
+		owner.remoteLogin(loginInfo);
+		var authed = users.some(function(user) {
 			return true;//loginInfo.account == user.account && loginInfo.password == user.password;
 		});
 		if (authed) {
@@ -29,11 +29,50 @@
 			return callback('用户名或密码错误');
 		}
 	};
+	
+	/**
+	 * 服务器端 远程登录
+	 */
+	owner.remoteLogin = function(loginInfo, callback){
+		var username = loginInfo.account;
+		var password = loginInfo.password;
+		var secretKey = 'thinkgem,jeesite,com';
+		var userNameEncode = DesUtils.encode(username, secretKey);
+		var passwordEncode = DesUtils.encode(password, secretKey);
+		//清除所有cookie
+		plus.navigator.removeAllCookie();
+		var url = mui.baseLoginUrl();
+		$.ajax( url + 'login',{
+			data:{
+				username:userNameEncode,
+				password:passwordEncode
+			},
+			dataType:'json',
+			type:'post',
+			headers:{'Content-Type':'application/x-www-form-urlencoded'},	              
+			async: false,
+			success:function(data){
+				if(data.user){
+					sessionStorage.setItem('userName', data.user.userName);
+					sessionStorage.setItem('loginCode', data.user.loginCode);
+					sessionStorage.setItem('userCode', data.user.userCode);
+					sessionStorage.setItem('sessionid',data.sessionid);
+					return owner.createState(loginInfo.account, data.sessionid, callback);
+				}else{
+					return callback(data.message);
+				}
+			},
+			error:function(xhr,type,errorThrown){
+				console.error("状态码：" + XMLHttpRequest.status + " ;状态：" + XMLHttpRequest.readyState + " ;错误信息：" + textStatus);
+				return callback('请检查网络设置');
+			}
+		});
+	}
 
-	owner.createState = function(name, callback) {
+	owner.createState = function(name,token, callback) {
 		var state = owner.getState();
 		state.account = name;
-		state.token = "token123456789";
+		state.token = token;//"token123456789";
 		owner.setState(state);
 		return callback();
 	};

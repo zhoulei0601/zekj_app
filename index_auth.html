@@ -16,29 +16,14 @@
     </script>
 </head>
 <body>
-	<nav class="mui-bar mui-bar-tab">
-		<a class="mui-tab-item mui-active" href="html/new-webview.html">
-			<span class="mui-icon mui-icon-home"></span>
-			<span class="mui-tab-label">首页</span>
-		</a>
-		<a class="mui-tab-item" href="html/tab-webview-subpage-chat.html">
-			<span class="mui-icon mui-icon-phone"></span>
-			<span class="mui-tab-label">电话</span>
-		</a>
-		<a class="mui-tab-item" href="html/tab-webview-subpage-contact.html">
-			<span class="mui-icon mui-icon-email"></span>
-			<span class="mui-tab-label">邮件</span>
-		</a>
-		<a class="mui-tab-item" href="html/setting.html">
-			<span class="mui-icon mui-icon-gear"></span>
-			<span class="mui-tab-label">设置</span>
-		</a>
+	<nav id="menuId" class="mui-bar mui-bar-tab">
+
 	</nav>
 	<script type="text/javascript">
 		(function($){
 			$.init();
 			//创建子页面
-			var subpages = ['html/new-webview.html','html/tab-webview-subpage-chat.html','html/tab-webview-subpage-contact.html','setting.html'];
+			var subpages = [];
 			var subpage_style = {
 				top: '0px',
 				bottom: '50px',
@@ -47,6 +32,7 @@
 						 
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			$.plusReady(function(){
+			/* 	debugger;
 				//验证是否登录
 				if(!sessionStorage.getItem("sessionid")){
 					app.remoteLogin({}, function(err) {
@@ -57,9 +43,33 @@
 									name: 'login', //扩展参数
 								}
 							});
+							return false;
 						}
 					});
-				}
+				} */
+				var url = mui.baseUrl();
+				$.ajax(url + 'app/menu',{
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					async: false,
+					headers:{'Content-Type':'application/json'},	              
+					success:function(data){
+						var html = '';
+						for(var i = 0 ; i < data.length ; i++){
+							html += '<a class="mui-tab-item" href="'+ data[i].url +'">';
+							html += '<span class="mui-icon '+ data[i].iconClass +'"></span>';
+							html += '<span class="mui-tab-label">'+ data[i].title +'</span>';
+							html += '</a>';
+							subpages.push(data[i].url);
+						}
+						document. getElementById("menuId").innerHTML  = html;
+					},
+					error:function(xhr,type,errorThrown){
+	
+						console.log(type);
+					}
+				});
 				//获得当前页面
 				var self = plus.webview.currentWebview();
 				//循环创建子页面
@@ -91,6 +101,19 @@
 				var target = plus.webview.getWebviewById(targetTab);
 				$.fire(target, 'refresh', {selectTab:1});
 			});
+			var backButtonPress = 0;
+			$.back = function(event) {
+				backButtonPress++;
+				if (backButtonPress > 1) {
+					plus.runtime.quit();
+				} else {
+					plus.nativeUI.toast('再按一次退出应用');
+				}
+				setTimeout(function() {
+					backButtonPress = 0;
+				}, 1000);
+				return false;
+			};
 		}(mui));
 					 
 	</script>

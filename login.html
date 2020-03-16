@@ -87,7 +87,11 @@
 		</style>
 
 	</head>
-
+	<script src="js/mui.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/mui.enterfocus.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/des.js"></script>
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<h1 class="mui-title">登录</h1>
@@ -106,7 +110,10 @@
 			<form class="mui-input-group">
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell">
-						自动登录
+						 <label>记住密码</label>
+						 <input id="rememberMe" name="checkbox1" value="Item 1" type="checkbox">
+							 &nbsp;&nbsp;
+						 <label>自动登录</label>
 						<div id="autoLogin" class="mui-switch">
 							<div class="mui-switch-handle"></div>
 						</div>
@@ -115,16 +122,13 @@
 			</form>
 			<div class="mui-content-padded">
 				<button id='login' type="button" class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
+				<!-- <div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a> -->
 				</div>
 			</div>
 			<!-- <div class="mui-content-padded oauth-area">
 
 			</div> -->
 		</div>
-		<script src="js/mui.min.js"></script>
-		<script src="js/mui.enterfocus.js"></script>
-		<script src="js/app.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
@@ -136,18 +140,7 @@
 					var state = app.getState();
 					var mainPage = plus.webview.getWebviewById("main");
 					var main_loaded_flag = false;
-					if(!mainPage){
-						mainPage = $.preload({
-							"id": 'main',
-							"url": 'index.html'
-						});
-					}else{
-						main_loaded_flag = true;
-					}
 					
-					mainPage.addEventListener("loaded",function () {
-						main_loaded_flag = true;
-					});
 					var toMain = function() {
 						//使用定时器的原因：
 						//可能执行太快，main页面loaded事件尚未触发就执行自定义事件，此时必然会失败
@@ -234,16 +227,64 @@
 					var autoLoginButton = doc.getElementById("autoLogin");
 					var regButton = doc.getElementById('reg');
 					var forgetButton = doc.getElementById('forgetPassword');
+					if(settings.rememberMe){
+						doc.getElementById('rememberMe').checked = true;
+						accountBox.value = settings.username;
+						passwordBox.value = settings.password;
+						if(settings.autoLogin){
+							var loginInfo = {
+								account: accountBox.value,
+								password: passwordBox.value
+							};
+							app.remoteLogin(loginInfo, function(err) {
+								if (err) {
+									plus.nativeUI.toast(err);
+									return false;
+								}
+								toMain();
+							});
+						}
+					}
+					debugger;
+					if(sessionStorage.getItem("sessionid")){
+						var loginInfo = {
+							account: accountBox.value,
+							password: passwordBox.value
+						};
+						app.remoteLogin(loginInfo, function(err) {
+							if (err) {
+								plus.nativeUI.toast(err);
+								return;
+							}
+							toMain();
+						});
+					}
 					loginButton.addEventListener('tap', function(event) {
 						var loginInfo = {
 							account: accountBox.value,
 							password: passwordBox.value
 						};
-						app.login(loginInfo, function(err) {
+						app.remoteLogin(loginInfo, function(err) {
 							if (err) {
 								plus.nativeUI.toast(err);
 								return;
 							}
+							if(!mainPage){
+								mainPage = $.preload({
+									"id": 'main',
+									"url": 'index_auth.html'
+								});
+							}else{
+								main_loaded_flag = true;
+							}
+							
+							mainPage.addEventListener("loaded",function () {
+								main_loaded_flag = true;
+							});
+							settings.username = accountBox.value;
+							settings.password =  passwordBox.value;
+							settings.rememberMe = doc.getElementById('rememberMe').checked ;
+							app.setSettings(settings);
 							toMain();
 						});
 					});
@@ -258,7 +299,7 @@
 							app.setSettings(settings);
 						}, 50);
 					}, false);
-					regButton.addEventListener('tap', function(event) {
+					/* regButton.addEventListener('tap', function(event) {
 						$.openWindow({
 							url: 'reg.html',
 							id: 'reg',
@@ -293,9 +334,9 @@
 					//
 					window.addEventListener('resize', function() {
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
-					}, false);
+					}, false); */
 					//
-					var backButtonPress = 0;
+					/* var backButtonPress = 0;
 					$.back = function(event) {
 						backButtonPress++;
 						if (backButtonPress > 1) {
@@ -307,7 +348,7 @@
 							backButtonPress = 0;
 						}, 1000);
 						return false;
-					};
+					}; */
 				});
 			}(mui, document));
 		</script>
