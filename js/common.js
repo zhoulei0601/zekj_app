@@ -5,6 +5,7 @@ mui.extend({
 			 return  "http://192.168.1.115:8980/js/f/";
 
 	    },
+	//登录路径
 	baseLoginUrl: function(){
 	        return  "http://192.168.1.115:8980/js/a/";
 	
@@ -12,6 +13,10 @@ mui.extend({
 	imageUrl: function(){
 		    return  "http://172.200.100.100:8980/js/f/static/images/PatrolRepairImages/";
 		},
+	//应用入口首页
+	getFirstPage: function(){
+		return "index_auth.html";
+	},	
 	
 	//获取列集合
 	getDataColumns:function(data) {

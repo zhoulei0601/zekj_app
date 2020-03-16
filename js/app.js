@@ -39,8 +39,8 @@
 		var secretKey = 'thinkgem,jeesite,com';
 		var userNameEncode = DesUtils.encode(username, secretKey);
 		var passwordEncode = DesUtils.encode(password, secretKey);
-		//清除所有cookie
-		plus.navigator.removeAllCookie();
+/* 		//清除所有cookie
+		plus.navigator.removeAllCookie(); */
 		var url = mui.baseLoginUrl();
 		$.ajax( url + 'login',{
 			data:{
@@ -53,10 +53,10 @@
 			async: false,
 			success:function(data){
 				if(data.user){
-					sessionStorage.setItem('userName', data.user.userName);
-					sessionStorage.setItem('loginCode', data.user.loginCode);
-					sessionStorage.setItem('userCode', data.user.userCode);
-					sessionStorage.setItem('sessionid',data.sessionid);
+					localStorage.setItem('userName', data.user.userName);
+					localStorage.setItem('loginCode', data.user.loginCode);
+					localStorage.setItem('userCode', data.user.userCode);
+					localStorage.setItem('sessionid',data.sessionid);
 					return owner.createState(loginInfo.account, data.sessionid, callback);
 				}else{
 					return callback(data.message);

@@ -29,35 +29,21 @@
 				bottom: '50px',
 				scrollIndicator: "none" // 当你的界面的内容足够多的时候，会出现滚动条，这个是隐藏滚动条
 			};
-						 
-			//创建子页面，首个选项卡页面显示，其它均隐藏；
+			//获取当前用户菜单
 			$.plusReady(function(){
-			/* 	debugger;
-				//验证是否登录
-				if(!sessionStorage.getItem("sessionid")){
-					app.remoteLogin({}, function(err) {
-						if (err) {
-							$.openWindow({
-								url: 'login.html',
-								extras: {
-									name: 'login', //扩展参数
-								}
-							});
-							return false;
-						}
-					});
-				} */
-				var url = mui.baseUrl();
-				$.ajax(url + 'app/menu',{
+				var url = mui.baseLoginUrl() + 'app/menu';
+				$.ajax(url ,{
+					data:{
+						userCode: localStorage.getItem("userCode")
+					},
 					dataType:'json',//服务器返回json格式数据
 					type:'post',//HTTP请求类型
-					timeout:10000,//超时时间设置为10秒；
 					async: false,
-					headers:{'Content-Type':'application/json'},	              
+					headers:{'Content-Type':'application/x-www-form-urlencoded'},	              
 					success:function(data){
 						var html = '';
 						for(var i = 0 ; i < data.length ; i++){
-							html += '<a class="mui-tab-item" href="'+ data[i].url +'">';
+							html += '<a class="mui-tab-item ' + (i == 0 ? 'mui-active' : '') +'" href="'+ data[i].url +'">';
 							html += '<span class="mui-icon '+ data[i].iconClass +'"></span>';
 							html += '<span class="mui-tab-label">'+ data[i].title +'</span>';
 							html += '</a>';
@@ -66,7 +52,6 @@
 						document. getElementById("menuId").innerHTML  = html;
 					},
 					error:function(xhr,type,errorThrown){
-	
 						console.log(type);
 					}
 				});
