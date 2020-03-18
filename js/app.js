@@ -39,10 +39,10 @@
 		var secretKey = 'thinkgem,jeesite,com';
 		var userNameEncode = DesUtils.encode(username, secretKey);
 		var passwordEncode = DesUtils.encode(password, secretKey);
-/* 		//清除所有cookie
-		plus.navigator.removeAllCookie(); */
+ 		//清除所有cooki
+		//plus.navigator.removeAllCookie(); 
 		var url = mui.baseLoginUrl();
-		$.ajax( url + 'login',{
+		$.ajax( url + 'login?__login=true&__ajax=json',{
 			data:{
 				username:userNameEncode,
 				password:passwordEncode
@@ -51,8 +51,10 @@
 			type:'post',
 			headers:{'Content-Type':'application/x-www-form-urlencoded'},	              
 			async: false,
+			timeout:2000,
 			success:function(data){
 				if(data.user){
+					console.log(data.user.userName);
 					localStorage.setItem('userName', data.user.userName);
 					localStorage.setItem('loginCode', data.user.loginCode);
 					localStorage.setItem('userCode', data.user.userCode);
@@ -63,7 +65,7 @@
 				}
 			},
 			error:function(xhr,type,errorThrown){
-				console.error("状态码：" + XMLHttpRequest.status + " ;状态：" + XMLHttpRequest.readyState + " ;错误信息：" + textStatus);
+				console.error("状态码：" + xhr.status + " ;状态：" + xhr.readyState + " ;错误信息：" + xhr.statusText);
 				return callback('请检查网络设置');
 			}
 		});

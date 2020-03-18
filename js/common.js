@@ -15,7 +15,7 @@ mui.extend({
 		},
 	//应用入口首页
 	getFirstPage: function(){
-		return "index_auth.html";
+		return "index.html";
 	},	
 	
 	//获取列集合

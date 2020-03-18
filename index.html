@@ -29,7 +29,7 @@
 			<span class="mui-icon mui-icon-email"></span>
 			<span class="mui-tab-label">邮件</span>
 		</a>
-		<a class="mui-tab-item" href="html/setting.html">
+		<a class="mui-tab-item" href="setting.html">
 			<span class="mui-icon mui-icon-gear"></span>
 			<span class="mui-tab-label">设置</span>
 		</a>
@@ -47,19 +47,6 @@
 						 
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			$.plusReady(function(){
-				//验证是否登录
-				if(!sessionStorage.getItem("sessionid")){
-					app.remoteLogin({}, function(err) {
-						if (err) {
-							$.openWindow({
-								url: 'login.html',
-								extras: {
-									name: 'login', //扩展参数
-								}
-							});
-						}
-					});
-				}
 				//获得当前页面
 				var self = plus.webview.currentWebview();
 				//循环创建子页面
@@ -91,6 +78,19 @@
 				var target = plus.webview.getWebviewById(targetTab);
 				$.fire(target, 'refresh', {selectTab:1});
 			});
+			var backButtonPress = 0;
+			$.back = function(event) {
+				backButtonPress++;
+				if (backButtonPress > 1) {
+					plus.runtime.quit();
+				} else {
+					plus.nativeUI.toast('再按一次退出应用');
+				}
+				setTimeout(function() {
+					backButtonPress = 0;
+				}, 1000);
+				return false;
+			};
 		}(mui));
 					 
 	</script>
