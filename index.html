@@ -82,6 +82,7 @@
 			$.back = function(event) {
 				backButtonPress++;
 				if (backButtonPress > 1) {
+					logout();
 					plus.runtime.quit();
 				} else {
 					plus.nativeUI.toast('再按一次退出应用');
@@ -91,6 +92,12 @@
 				}, 1000);
 				return false;
 			};
+			function logout(){
+				mui.post(mui.baseLoginUrl() + "/logout",{
+					},function(data){
+					},'json'
+				);
+			}
 		}(mui));
 					 
 	</script>

@@ -40,7 +40,7 @@
 		var userNameEncode = DesUtils.encode(username, secretKey);
 		var passwordEncode = DesUtils.encode(password, secretKey);
  		//清除所有cookie
-		plus.navigator.removeAllCookie(); 
+		//plus.navigator.removeAllCookie(); 
 		var url = mui.baseLoginUrl();
 		$.ajax( url + 'login?__login=true&__ajax=json',{
 			data:{
