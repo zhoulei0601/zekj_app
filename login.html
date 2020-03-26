@@ -8,81 +8,103 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link href="css/style.css" rel="stylesheet" />
 		<style>
-			.area {
-				margin: 20px auto 0px auto;
+			body{
+				background-color: #f5f6f8;
 			}
-			
-			.mui-input-group {
-				margin-top: 10px;
+			.head {
+				width: 85%;
+				margin: 0 auto;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding-top: $logo-padding;
+				padding-bottom: $logo-padding;
+				}
+			.head_bg {
+				margin-top: 50px;
+				border: 1px solid #fbecf1;
+				border-radius: 60px;
+				width: 120px;
+				height: 120px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
-			
-			.mui-input-group:first-child {
-				margin-top: 20px;
+			.head_inner_bg {
+				border-radius: 40px;
+				width: 92px;
+				height: 92px;
+				display: flex;
+				align-items: flex-end;
+				justify-content: center;
+				overflow: hidden;
 			}
-			
-			.mui-input-group label {
-				width: 22%;
+			.content{
+				margin: 80px auto 0px;
+				width: 85%;
 			}
-			
-			.mui-input-row label~input,
-			.mui-input-row label~select,
-			.mui-input-row label~textarea {
-				width: 78%;
-			}
-			
-			.mui-checkbox input[type=checkbox],
-			.mui-radio input[type=radio] {
-				top: 6px;
-			}
-			
-			.mui-content-padded {
-				margin-top: 25px;
-			}
-			
-			.mui-btn {
-				padding: 10px;
-			}
-			
-			.link-area {
-				display: block;
-				margin-top: 25px;
-				text-align: center;
-			}
-			
-			.spliter {
-				color: #bbb;
-				padding: 0px 8px;
-			}
-			
-			.oauth-area {
-				position: absolute;
-				bottom: 20px;
-				left: 0px;
-				text-align: center;
+			.input-div{
+				box-sizing: border-box;
+				appearance: none;
+				border: 1px solid #e5e5e5;
+				box-shadow: none;
+				border-radius: 44px;
+				height: 43px;
 				width: 100%;
-				padding: 0px;
-				margin: 0px;
+				background-color: #FFF;
+				margin-bottom: 15px;
 			}
-			
-			.oauth-area .oauth-btn {
-				display: inline-block;
-				width: 50px;
-				height: 50px;
-				background-size: 30px 30px;
-				background-position: center center;
-				background-repeat: no-repeat;
-				margin: 0px 20px;
-				/*-webkit-filter: grayscale(100%); */
-				border: solid 1px #ddd;
-				border-radius: 25px;
+			.slf-input{
+				height: 39px !important;
+				width: 85% !important;
+				border:0px solid red !important;
+				padding: 0px !important;
+				line-height: 31px !important;
+				margin: 0px 0px 0px 11px !important;
+				border-radius: 13px !important;
+				color: #353535;
+				font-size: 14px !important;
+				font-family: inherit !important;
 			}
-			
-			.oauth-area .oauth-btn:active {
-				border: solid 1px #aaa;
+			.input-div img{
+				width: 25px;
+				height: 25px;
+				margin-top: 6px;
+				float: right;
 			}
-			
-			.oauth-area .oauth-btn.disabled {
-				background-color: #ddd;
+			.rem{
+				font-size: 14px;
+				text-align: right;
+				margin-bottom: 15px;
+			}
+			.loginBtn {
+				margin-top: 40px;
+				height: 43px;
+				width: 100%;
+				line-height: 33px;
+				color: #ffffff;
+				font-size: 18px;
+				border-radius: 44px;
+				outline: 0;
+				display: block;
+				margin: 0;
+				font-family: inherit;
+				background: #f35;
+				opacity: 0.8;
+				font-family: inherit ;
+			}
+			.mui-switch {
+			    display: inline-block;
+				width: 59px;
+				height: 26px;
+			}
+			.mui-switch:before {
+			    font-size: 5px;
+			}
+			.mui-switch .mui-switch-handle {
+			    top: 0px;
+			    width: 20px;
+			    height: 20px;
 			}
 		</style>
 
@@ -93,43 +115,50 @@
 	<script src="js/app.js"></script>
 	<script src="js/des.js"></script>
 	<body>
-		<header class="mui-bar mui-bar-nav">
+		<!-- <header class="mui-bar mui-bar-nav">
 			<h1 class="mui-title">登录</h1>
-		</header>
-		<div class="mui-content">
-			<form id='login-form' class="mui-input-group">
-				<div class="mui-input-row">
-					<label>账号</label>
-					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
-				</div>
-				<div class="mui-input-row">
-					<label>密码</label>
-					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
-				</div>
-			</form>
-			<form class="mui-input-group">
-				<ul class="mui-table-view mui-table-view-chevron">
-					<li class="mui-table-view-cell">
-						 <label>记住密码</label>
-						 <input id="rememberMe" name="checkbox1" value="Item 1" type="checkbox">
-							 &nbsp;&nbsp;
-						 <label>自动登录</label>
-						<div id="autoLogin" class="mui-switch">
-							<div class="mui-switch-handle"></div>
-						</div>
-					</li>
-				</ul>
-			</form>
-			<div class="mui-content-padded">
-				<button id='login' type="button" class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<!-- <div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a> -->
+		</header> -->
+		<div class="head">
+			<div class="head_bg">
+				<div class="head_inner_bg">
+					<img style="width: 92px;height: 92px;" src="images/loginIcon/login.png" />
 				</div>
 			</div>
-			<!-- <div class="mui-content-padded oauth-area">
-
-			</div> -->
+			
+		</div>
+		<div class="content">
+			<form id='login-form'>
+				<div class="input-div">
+					<input id='account' type="text" class="slf-input" placeholder="请输入账号">
+					 <img src="images/loginIcon/cancel.png" onclick="clearAccount()"/> 
+				</div>
+				<div class="input-div">
+					<input id='password' type="password" class="slf-input" placeholder="请输入密码">
+					 <img src="images/loginIcon/eye_protection.png" onclick="showPsd()"/> 
+				</div>
+				<div class="rem">
+					<label>记住密码</label>
+					 <input id="rememberMe" name="checkbox1" value="Item 1" type="checkbox">
+						 &nbsp;&nbsp;
+					 <label>自动登录</label>
+					<div id="autoLogin" class="mui-switch">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+				<button id='login' type="button" class="loginBtn">登录</button>
+			</form>
 		</div>
 		<script>
+			//清空账号
+			function clearAccount(){
+				document.getElementById("account").value = '';
+			}
+			//显示密码
+			function showPsd(){
+				var psdObj = document.getElementById("password");
+				psdObj.setAttribute("type",'text');
+				psdObj.value = psdObj.value;
+			}
 			(function($, doc) {
 				$.init({
 					statusBarBackground: '#f7f7f7'
@@ -154,6 +183,7 @@
 					};
 					//登录
 					var doLogin = function(){
+						document.getElementById("login").innerText = '登录中...';
 						var loginInfo = {
 							account: accountBox.value,
 							password: passwordBox.value
@@ -161,6 +191,7 @@
 						app.remoteLogin(loginInfo, function(err) {
 							if (err) {
 								plus.nativeUI.toast(err);
+								document.getElementById("login").innerText = '登录';
 								return;
 							}
 							if(!mainPage){
@@ -249,6 +280,7 @@
 						return false;
 					}; 
 				});
+				
 			}(mui, document));
 		</script>
 	</body>

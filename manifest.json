@@ -1,7 +1,7 @@
 {
     "@platforms" : [ "android", "iPhone", "iPad" ],
     "id" : "H5EE87194", /*应用的标识，创建应用时自动生成，勿手动修改*/
-    "name" : "zwkj_app", /*应用名称，程序桌面图标名称*/
+    "name" : "作为科技", /*应用名称，程序桌面图标名称*/
     "version" : {
         "name" : "1.0.0", /*应用版本名称*/
         "code" : "83"
@@ -118,7 +118,7 @@
                 "android" : {
                     "mdpi" : "", /*普通屏程序图标，分辨率：48x48*/
                     "ldpi" : "", /*大屏程序图标，分辨率：48x48*/
-                    "hdpi" : "", /*高分屏程序图标，分辨率：72x72*/
+                    "hdpi" : "C:/Users/zhoulei/Desktop/img/tubiao.png", /*高分屏程序图标，分辨率：72x72*/
                     "xhdpi" : "", /*720P高分屏程序图标，分辨率：96x96*/
                     "xxhdpi" : ""
                 }
@@ -152,7 +152,8 @@
             "plugins" : {
                 "speech" : {
                     "ifly" : {}
-                }
+                },
+                "ad" : {}
             }
         },
         "screenOrientation" : [ "portrait-primary", "portrait-secondary" ]

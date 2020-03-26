@@ -21,7 +21,7 @@
 		<button onclick="choosePhoto(this)">上传</button>
 		<img src="" id="pictureId" style="width: 200px;height: 100px;" />
 
-		
+		<p id="checkLogin"></p>
 		<script>
 			mui.init(); 
 			function choosePhoto(event) {
@@ -195,6 +195,7 @@
 						console.error("状态码：" + XMLHttpRequest.status + " ;状态：" + XMLHttpRequest.readyState + " ;错误信息：" + textStatus);
 					},
 					success: function(data){
+						$("#checkLogin").append(JSON.stringify(data));
 						console.log(data);
 					},
 				}
