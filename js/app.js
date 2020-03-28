@@ -70,6 +70,14 @@
 			}
 		});
 	}
+	
+	//登出
+	owner.logout = function(){
+		mui.post(mui.baseLoginUrl() + "/logout",{
+			},function(data){
+			},'json'
+		);
+	}
 
 	owner.createState = function(name,token, callback) {
 		var state = owner.getState();
