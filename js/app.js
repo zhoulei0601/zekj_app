@@ -37,15 +37,19 @@
 		var username = loginInfo.account;
 		var password = loginInfo.password;
 		var secretKey = 'thinkgem,jeesite,com';
-		var userNameEncode = DesUtils.encode(username, secretKey);
-		var passwordEncode = DesUtils.encode(password, secretKey);
+		var frameName = $.getFrameName();
+		//jessite 框架登录 使用密文
+		if("jessite" == frameName){
+			username = DesUtils.encode(username, secretKey);
+			password = DesUtils.encode(password, secretKey);
+		}
  		//清除所有cookie
 		//plus.navigator.removeAllCookie(); 
-		var url = mui.baseLoginUrl();
+		var url = $.baseLoginUrl();
 		$.ajax( url + 'login?__login=true&__ajax=json',{
 			data:{
-				username:userNameEncode,
-				password:passwordEncode
+				username:username,
+				password:password
 			},
 			dataType:'json',
 			type:'post',
@@ -53,15 +57,22 @@
 			async: false,
 			timeout:2000,
 			success:function(data){
-				if(data.user){
-					console.log(data.user.userName);
-					localStorage.setItem('userName', data.user.userName);
-					localStorage.setItem('loginCode', data.user.loginCode);
-					localStorage.setItem('userCode', data.user.userCode);
-					localStorage.setItem('sessionid',data.sessionid);
-					return owner.createState(loginInfo.account, data.sessionid, callback);
+				if("jessite" == frameName){
+					if(data.user){
+						localStorage.setItem('userName', data.user.userName);
+						localStorage.setItem('userCode', data.user.userCode);
+						return owner.createState(loginInfo.account, data.sessionid, callback);
+					}else{
+						return callback(data.message);
+					}
 				}else{
-					return callback(data.message);
+					if(data.success){
+						localStorage.setItem('userName', data.data.name);
+						localStorage.setItem('userCode', data.data.account);
+						return owner.createState(loginInfo.account, data.sessionid, callback);
+					}else{
+						return callback(data.message);
+					}
 				}
 			},
 			error:function(xhr,type,errorThrown){
@@ -73,7 +84,7 @@
 	
 	//登出
 	owner.logout = function(){
-		mui.post(mui.baseLoginUrl() + "/logout",{
+		mui.post(mui.baseLoginUrl() + "logout",{
 			},function(data){
 			},'json'
 		);

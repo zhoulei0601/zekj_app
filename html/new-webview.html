@@ -7,7 +7,7 @@
 		<link href="../css/mui.min.css" rel="stylesheet" />
 		<script src="../libs/jquery/jquery-1.8.3.min.js"></script>
 		<script src="../js/mui.min.js"></script>
-		
+		<script src="../js/common.js"></script>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav">
@@ -184,12 +184,13 @@
 		
 		$(function(){
 			console.log(localStorage.getItem("userCode"));
-			var url = "http://192.168.1.115:8980/js/a/botgjxhgl/leadershipArrangement/listData";
+			var url =  mui.baseLoginUrl() + "botgjxhgl/leadershipArrangement/listData";
+			url =  mui.baseLoginUrl() + "dept/list?page=1&limit=10";
 			mui.ajax(url,
 				{
-					type: "post",		
+					type: "get",		
 					dataType: 'json',
-					headers:{ 'contentType' : 'application/x-www-form-urlencoded'},	
+					headers:{ 'contentType' : 'application/json;charset=UTF-8'},	
 					timeout:10000,//超时时间设置为10秒；
 					error:function(XMLHttpRequest, textStatus, errorThrown){
 						console.error("状态码：" + XMLHttpRequest.status + " ;状态：" + XMLHttpRequest.readyState + " ;错误信息：" + textStatus);

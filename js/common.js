@@ -7,7 +7,7 @@ mui.extend({
 	    },
 	//登录路径
 	baseLoginUrl: function(){
-	        return  "http://192.168.1.115:8980/js/a/";
+	        return  "http://192.168.1.115:9666/";//http://192.168.1.115:8980/js/a/";
 	
 	    },
 	imageUrl: function(){
@@ -17,7 +17,10 @@ mui.extend({
 	getFirstPage: function(){
 		return "index.html";
 	},	
-	
+	//后台系统框架 jeesite guns
+	getFrameName:function(){
+		return "guns";//jessite
+	},
 	//获取列集合
 	getDataColumns:function(data) {
 			var columns = {};
