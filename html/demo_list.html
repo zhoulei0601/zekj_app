@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../libs/bootstrap-4.4.1/css/bootstrap.min.css" rel="stylesheet"/>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.title {
+				padding: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+				background-color: #fff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">列表（上拉刷新、触底加载）</h1>
+		</header>
+		<div id="pullrefresh" class="mui-content">
+			<table class="table">
+				<caption>上下文表格布局</caption>
+				<thead>
+					<tr>
+						<th>产品</th>
+						<th>付款日期</th>
+						<th>状态</th>
+					</tr>
+				</thead>
+				<tbody id="gridData">
+				</tbody>
+			</table>
+		</div>
+		<script src="../libs/jquery/jquery-1.8.3.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/common.js"></script>
+		<script src="../libs/bootstrap-4.4.1/js/bootstrap.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack: false,
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						style:'circle',
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			
+			//随机grid数据
+			var random = function(val){
+				var obj = {};
+				if(val % 2 == 0){
+					obj = {"product" :  "产品" + val,"date" : "23/11/2020","status" : "待发货","classStyle" : "table-primary"};
+				}else if(val % 3 == 0){
+					obj = {"product" :  "产品" + val,"date" : "21/10/2020","status" : "已发货","classStyle" : "table-success"};
+				}else if(val % 5 == 0){
+					obj = {"product" :  "产品" + val,"date" : "11/08/2020","status" : "待确认","classStyle" : "table-warning"};
+				}else{
+					obj = {"product" :  "产品" + val,"date" : "05/03/2020","status" : "已退货","classStyle" : "table-danger"};
+				}
+				return obj;
+			}
+			
+			//模拟分页
+			var pageNo = 1;
+			var pageSize = 10;
+			var dataGrid = [];
+			for(var i = 0 ; i < 55 ; i++){
+				dataGrid.push(random(i));
+			}
+			
+			/**
+			 * 初始
+			 */
+			$(function(){
+				var html = "";
+				for(var i = 0 ; i < pageNo*pageSize ; i++){
+					var obj = dataGrid[i];
+					html += "<tr class ='" + obj.classStyle + "'>";
+					html += "<td>" + obj.product + "</td>";
+					html += "<td>" + obj.date + "</td>";
+					html += "<td>" + obj.status + "</td>";
+					html += "</tr>";
+				}
+				$("#gridData").append(html);
+			});
+			
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var html = "";
+					var len = pageNo * pageSize > dataGrid.length ? dataGrid.length : pageNo * pageSize;
+					for(var i = 0 ; i < len ; i++){
+						var obj = dataGrid[i];
+						html += "<tr class='" + obj.classStyle + "'>";
+						html += "<td>" + obj.product + "</td>";
+						html += "<td>" + obj.date + "</td>";
+						html += "<td>" + obj.status + "</td>";
+						html += "</tr>";
+					}
+					$("#gridData").empty();
+					$("#gridData").append(html);
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+					mui.toast('下拉刷新成功');
+				}, 1000);
+			}
+			
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((pageNo * pageSize >= dataGrid.length)); //参数为true代表没有更多数据了。
+					var html = "";
+					var len = (pageNo + 1) * pageSize > dataGrid.length ? dataGrid.length : (pageNo + 1) * pageSize;
+					for(var i = pageNo * pageSize ; i < len ; i++){
+						var obj = dataGrid[i];
+						html += "<tr class='" + obj.classStyle + "'>";
+						html += "<td>" + obj.product + "</td>";
+						html += "<td>" + obj.date + "</td>";
+						html += "<td>" + obj.status + "</td>";
+						html += "</tr>";
+					}
+					$("#gridData").append(html);
+					pageNo++;
+				}, 1000);
+			}
+		</script>
+	</body>
+
+</html>
